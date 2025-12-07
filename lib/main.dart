@@ -1,32 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:house_services/view/splash_screen/splash_screen.dart';
+import 'package:provider/provider.dart';
+import 'core/theme/app_theme.dart';
+import 'providers/auth_provider.dart';
+import 'providers/cart_provider.dart';
+import 'screens/splash/splash_screen.dart';
 
-Future<void> main() async {
-  runApp(const MyApp());
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const WaterFilterNetApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-  // This widget is the root of your application.
+class WaterFilterNetApp extends StatelessWidget {
+  const WaterFilterNetApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-        designSize:  const Size(428, 926),
-        minTextAdapt: true,
-        splitScreenMode: true,
-
-        builder: (context, child) {
-          return  MaterialApp(
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              fontFamily: 'CircularStd',
-            ),
-            title: 'Home Service',
-            home: const SplashScreen(),
-          );
-        }
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => CartProvider()),
+      ],
+      child: MaterialApp(
+        title: 'WaterFilterNet',
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme.lightTheme,
+        home: const SplashScreen(),
+      ),
     );
   }
 }
-
